@@ -1,7 +1,7 @@
 const path = require('path');
 
 require('dotenv').config({
-  path: path.resolve(__dirname, '..', '.env.development')
+  path: path.resolve(__dirname, '..', '.env.production')
 });
 
 console.log(process.env.GN_ENV);
@@ -89,7 +89,36 @@ const createCharge = async (accessToken, chargeData) => {
   return result.data;
 }
 
+const getLoc = async (accessToken, locId) => {
+  // Load certificate from file located in root dir
+  const certificate =
+  fs.readFileSync(path.resolve(__dirname, '..', process.env.GN_CERTIFICATE));
+
+  // Create a HTTPS Agent to indicate who you are to api
+  const httpsAgent = new https.Agent({
+    pfx: certificate,
+    passphrase: '',
+  });
+
+  // Create aconfig object to send axios requests correctly
+  const config = {
+    method: 'GET',
+    url: `${baseUrl}/v2/loc/${locId}/qrcode`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    httpsAgent,
+  };
+
+  // Send the request with axios using previous config object
+  const result = await axios(config);
+
+  return result.data;
+}
+
 const run = async () => {
+  const pixKey = process.env.PIX_KEY;
   const { access_token } = await getToken();
 
   const chargeData = {
@@ -103,13 +132,15 @@ const run = async () => {
     valor: {
       original: '130.50',
     },
-    chave: 'aaa',
+    chave: pixKey,
     solicitacaoPagador: 'Cobrança dos serviços prestados',
   };
 
   const charge = await createCharge(access_token, chargeData);
 
-  console.log(charge);
+  const qrcode = await getLoc(access_token, charge.loc.id);
+
+  console.log(qrcode);
 }
 
 run();
