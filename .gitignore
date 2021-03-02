@@ -1,0 +1,6 @@
+*.p12
+
+node_modules
+
+.env.production
+.env.development
