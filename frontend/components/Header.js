@@ -5,7 +5,9 @@ import CartIcon from './icons/CartIcon';
 const Header = () => {
   const { cart } = useCart();
 
-  const itemsCount = Object.keys(cart).length;
+  const itemsCount = Object.keys(cart).reduce((previousValue, currentValue) => {
+    return previousValue + cart[currentValue].quantity;
+  }, 0);
 
   return (
     <header class="bg-white shadow">
