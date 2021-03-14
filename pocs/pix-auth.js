@@ -1,7 +1,7 @@
 const path = require('path');
 
 require('dotenv').config({
-  path: path.resolve(__dirname, '..', '.env.production')
+  path: path.resolve(__dirname, '..', '.env.development')
 });
 
 console.log(process.env.GN_ENV);
