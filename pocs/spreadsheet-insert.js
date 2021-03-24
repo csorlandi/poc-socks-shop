@@ -2,7 +2,6 @@ const path = require('path');
 
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env.development') });
 
-const fs = require('fs');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 const credentials = require('../google-api-credentials.json');
