@@ -13,7 +13,7 @@ function Index({ products }) {
       </Head>
       <Header />
       <div className="p-6 bg-gray-100">
-        <main class="grid grid-flow-col grid-cols-3 gap-2">
+        <main className="grid grid-flow-col grid-cols-3 gap-2">
           {products.map(product => (
             <Product key={product.id} product={product} />
           ))}
